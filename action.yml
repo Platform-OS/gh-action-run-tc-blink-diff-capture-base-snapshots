@@ -39,6 +39,7 @@ runs:
         uses: peter-evans/create-pull-request@v5
         with:
           base: ${{ inputs.base }}
+          branch-suffix: timestamp
 
       - name: after ${{ inputs.test-name }}
         if: ${{ inputs.after && !inputs.skip }}
