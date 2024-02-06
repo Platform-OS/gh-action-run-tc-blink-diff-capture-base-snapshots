@@ -13,9 +13,6 @@ inputs:
     required: false
   skip:
     required: false
-  npm-prefix:
-    required: false
-    default: "."
 runs:
   using: "composite"
   steps:
@@ -33,7 +30,7 @@ runs:
         shell: sh
         run: |
           set -e
-          npm run ${{ inputs.test-name }} --prefix ${{ inputs.npm-prefix }}
+          npm run ${{ inputs.test-name }}
 
       - name: create pull request
         uses: peter-evans/create-pull-request@v5
