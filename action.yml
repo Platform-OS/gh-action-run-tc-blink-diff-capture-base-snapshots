@@ -4,14 +4,17 @@ inputs:
   base:
     required: true
     description: base branch for PR
+  npm-prefix:
+    required: true
+    description: directory where tests are located
   resolution:
-    description: 'screen resolution'
+    description: screen resolution
     required: true
   test-name:
-    description: 'test name'
+    description: test name
     required: true
   timestamp:
-    description: 'timestamp'
+    description: timestamp used in artifact name
     required: true
   before:
     required: false
