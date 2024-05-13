@@ -44,12 +44,6 @@ runs:
         env:
           TIMESTAMP: ${{ date "+%y%m%d%H%M%S" }}
 
-      - name: create pull request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          base: ${{ inputs.base }}
-          branch-suffix: timestamp
-
       - name: after ${{ inputs.test-name }}
         if: ${{ inputs.after && !inputs.skip }}
         shell: sh
