@@ -35,13 +35,17 @@ runs:
           set -e
           npm run ${{ inputs.test-name }}
 
-      - name: set up a timestamp
-        run: echo ::set-env name=TIMESTAMP::$(date "+%y%m%d%H%M%S")
+      - name: set a timestamp
+        id: set-timestamp
+        shell: sh
+        if: ${{ !inputs.skip }}
+        run: echo "TIMESTAMP=$(date '+%y%m%d%H%M%S')" >> $GITHUB_OUTPUT
 
       - name: archive screenshots
+        if: ${{ !inputs.skip }}
         uses: actions/upload-artifact@v4
         with:
-          name: base-snapshots-${{ env.TIMESTAMP }}
+          name: base-snapshots-${{ steps.set-timestamp.outputs.TIMESTAMP }}
           path: |
             ./tests/visual-tests/snapshots/${{ inputs.resolution }}
 
