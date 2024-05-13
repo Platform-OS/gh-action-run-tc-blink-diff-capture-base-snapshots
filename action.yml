@@ -45,7 +45,7 @@ runs:
         if: ${{ !inputs.skip }}
         uses: actions/upload-artifact@v4
         with:
-          name: base-snapshots-${{ steps.set-timestamp.outputs.TIMESTAMP }}
+          name: base-${{ inputs.resolution }}-snapshots-${{ steps.set-timestamp.outputs.TIMESTAMP }}
           path: |
             ./tests/visual-tests/snapshots/${{ inputs.resolution }}
 
