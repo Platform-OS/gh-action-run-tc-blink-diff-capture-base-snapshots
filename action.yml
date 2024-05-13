@@ -35,14 +35,15 @@ runs:
           set -e
           npm run ${{ inputs.test-name }}
 
+      - name: set up a timestamp
+        run: echo ::set-env name=TIMESTAMP::$(date "+%y%m%d%H%M%S")
+
       - name: archive screenshots
         uses: actions/upload-artifact@v4
         with:
           name: base-snapshots-${{ env.TIMESTAMP }}
           path: |
             ./tests/visual-tests/snapshots/${{ inputs.resolution }}
-        env:
-          TIMESTAMP: ${{ date "+%y%m%d%H%M%S" }}
 
       - name: after ${{ inputs.test-name }}
         if: ${{ inputs.after && !inputs.skip }}
