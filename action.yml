@@ -4,6 +4,9 @@ inputs:
   base:
     required: true
     description: base branch for PR
+  resolution:
+    description: 'screen resolution'
+    required: true
   test-name:
     description: 'test name'
     required: true
@@ -31,6 +34,15 @@ runs:
         run: |
           set -e
           npm run ${{ inputs.test-name }}
+
+      - name: archive screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: base-snapshots-${{ env.TIMESTAMP }}
+          path: |
+            ./tests/visual-tests/snapshots/${{ inputs.resolution }}
+        env:
+          TIMESTAMP: ${{ date "+%y%m%d%H%M%S" }}
 
       - name: create pull request
         uses: peter-evans/create-pull-request@v5
