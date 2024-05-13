@@ -26,6 +26,12 @@ runs:
         run: |
           ${{ inputs.before }}
 
+      - name: set a timestamp
+        id: set-timestamp
+        shell: sh
+        if: ${{ !inputs.skip }}
+        run: echo "TIMESTAMP=$(date '+%y%m%d%H%M%S')" >> $GITHUB_OUTPUT
+
       - name: run ${{ inputs.test-name }}
         env:
           REPORT_TYPE: ${{ inputs.test-name }}
@@ -33,13 +39,7 @@ runs:
         shell: sh
         run: |
           set -e
-          npm run ${{ inputs.test-name }}
-
-      - name: set a timestamp
-        id: set-timestamp
-        shell: sh
-        if: ${{ !inputs.skip }}
-        run: echo "TIMESTAMP=$(date '+%y%m%d%H%M%S')" >> $GITHUB_OUTPUT
+          npm run ${{ inputs.test-name }} --prefix ${{ inputs.npm-prefix }}
 
       - name: archive screenshots
         if: ${{ !inputs.skip }}
