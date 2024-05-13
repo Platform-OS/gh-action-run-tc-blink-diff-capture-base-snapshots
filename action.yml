@@ -10,6 +10,9 @@ inputs:
   test-name:
     description: 'test name'
     required: true
+  timestamp:
+    description: 'timestamp'
+    required: true
   before:
     required: false
   after:
@@ -26,12 +29,6 @@ runs:
         run: |
           ${{ inputs.before }}
 
-      - name: set a timestamp
-        id: set-timestamp
-        shell: sh
-        if: ${{ !inputs.skip }}
-        run: echo "TIMESTAMP=$(date '+%y%m%d%H%M%S')" >> $GITHUB_OUTPUT
-
       - name: run ${{ inputs.test-name }}
         env:
           REPORT_TYPE: ${{ inputs.test-name }}
@@ -45,9 +42,8 @@ runs:
         if: ${{ !inputs.skip }}
         uses: actions/upload-artifact@v4
         with:
-          name: base-${{ inputs.resolution }}-snapshots-${{ steps.set-timestamp.outputs.TIMESTAMP }}
-          path: |
-            ./tests/visual-tests/snapshots/${{ inputs.resolution }}
+          name: base-${{ inputs.resolution }}-snapshots-${{ inputs.timestamp }}
+          path: ./tests/visual-tests/snapshots/${{ inputs.resolution }}
 
       - name: after ${{ inputs.test-name }}
         if: ${{ inputs.after && !inputs.skip }}
