@@ -5,16 +5,13 @@ inputs:
     required: true
     description: base branch for PR
   npm-prefix:
-    required: true
+    required: false
     description: directory where tests are located
   resolution:
     description: screen resolution
     required: true
   test-name:
     description: test name
-    required: true
-  timestamp:
-    description: timestamp used in artifact name
     required: true
   before:
     required: false
