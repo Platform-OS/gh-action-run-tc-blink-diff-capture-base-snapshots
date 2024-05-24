@@ -35,7 +35,9 @@ runs:
         env:
           REPORT_TYPE: ${{ inputs.test-name }}
         if: ${{ !inputs.skip }}
+        shell: sh
         run: |
+          set -e
           npm run ${{ inputs.test-name }} --prefix ${{ inputs.npm-prefix }}
 
       - name: archive screenshots
