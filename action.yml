@@ -4,8 +4,15 @@ inputs:
   base:
     required: true
     description: base branch for PR
+  npm-prefix:
+    required: false
+    description: directory where package.json for tests is located
+    default: .
+  resolution:
+    description: screen resolution
+    required: true
   test-name:
-    description: 'test name'
+    description: test name
     required: true
   before:
     required: false
@@ -30,13 +37,14 @@ runs:
         shell: sh
         run: |
           set -e
-          npm run ${{ inputs.test-name }}
+          npm run ${{ inputs.test-name }} --prefix ${{ inputs.npm-prefix }}
 
-      - name: create pull request
-        uses: peter-evans/create-pull-request@v5
+      - name: archive screenshots
+        if: ${{ !inputs.skip }}
+        uses: actions/upload-artifact@v4
         with:
-          base: ${{ inputs.base }}
-          branch-suffix: timestamp
+          name: ${{ inputs.resolution }}
+          path: ./tests/visual-tests/snapshots/${{ inputs.resolution }}
 
       - name: after ${{ inputs.test-name }}
         if: ${{ inputs.after && !inputs.skip }}
@@ -49,7 +57,8 @@ runs:
         shell: sh
         run: |
           REPORT_TYPE=${{ inputs.test-name }}
-          echo "### FAILED $REPORT_TYPE tests report -> $UPLOAD_HOST/$REPORT_PATH-$REPORT_TYPE" >> $GITHUB_STEP_SUMMARY
+          echo "### $REPORT_TYPE tests report" >> $GITHUB_STEP_SUMMARY
+          echo "#### Status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
 
       - name: skip ${{ inputs.test-name }}
         if: ${{ !!inputs.skip }}
